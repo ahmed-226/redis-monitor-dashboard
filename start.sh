@@ -18,6 +18,12 @@ case "$1" in
         echo "Restarting existing containers..."
         docker-compose restart
         ;;
+    "reset-data")
+        echo "Removing all Redis data and restarting..."
+        docker-compose down
+        docker volume rm redis-moitor-dashboard_redis_data
+        docker-compose up -d
+        ;;
     *)
         echo "Starting or creating containers..."
         docker-compose up -d

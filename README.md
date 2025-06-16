@@ -10,7 +10,7 @@
 ![Redis Monitor Dashboard](assets/image.png)
 A real-time Redis monitoring dashboard with interactive charts and metrics visualization. This project provides comprehensive insights into Redis server performance with a beautiful, responsive UI.
 
-## 📊 Features
+## Features
 
 - **Real-time Monitoring**: Live Redis metrics with WebSocket updates
 - **Interactive Charts**: Memory usage, operations per second, connected clients, and cache hit rate
@@ -140,7 +140,7 @@ The dashboard displays the following Redis metrics:
 | **backend** | Node.js API server with health checks |
 | **frontend** | React app served by Nginx |
 
-## 💻 Development
+## Development
 
 ### Project Structure
 

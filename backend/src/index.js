@@ -22,6 +22,7 @@ app.get('/api/health', (req, res) => {
 app.get('/api/redis/info', metricsController.getRedisInfo);
 app.get('/api/redis/metrics', metricsController.getMetrics);
 app.get('/api/redis/keys', metricsController.getKeysCount);
+app.get('/api/redis/key-values', metricsController.getKeyValues);
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
