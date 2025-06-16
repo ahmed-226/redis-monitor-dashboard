@@ -35,11 +35,21 @@ All components are containerized using Docker for easy deployment.
 ### Prerequisites
 
 - [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/)
-- [Node.js](https://nodejs.org/) 18+ (for local development)
 
-### Running with Docker Compose
+### Option 1: Run using Combined Image (Recommended)
 
-1. Clone the repository:
+This option uses a pre-built Docker image containing both frontend and backend in a single container:
+
+```bash
+# Download the docker-compose file
+curl -O https://raw.githubusercontent.com/ahmed876/redis-monitor-dashboard/main/docker-compose.combined.yml
+
+# Start the services
+docker-compose -f docker-compose.combined.yml up -d
+```
+
+### Option 2:  Use repository:
+1. Clone repository
 ```bash
 git clone https://github.com/yourusername/redis-monitor-dashboard.git
 cd redis-monitor-dashboard
@@ -48,9 +58,27 @@ cd redis-monitor-dashboard
 2. Start all services:
 ```bash
 chmod +x start.sh
+```
+#### Available Commands
+``` bash
+# Run with combined image (single container for frontend+backend)
+./start.sh combined
+
+# Run with separate containers (default)
 ./start.sh
 
-docker-compose up -d
+# Other available commands:
+./start.sh combined clean     # Clean start with combined image
+./start.sh combined rebuild   # Rebuild with combined image
+./start.sh combined restart   # Restart with combined image
+./start.sh combined reset-data # Reset Redis data with combined image
+
+# Same commands work with separate containers (without 'combined'):
+./start.sh clean
+./start.sh rebuild
+./start.sh restart
+./start.sh reset-data
+
 ```
 
 3. Access the dashboard:
@@ -72,6 +100,8 @@ curl http://localhost:3001/api/redis/metrics
 curl http://localhost:3001/api/redis/info
 
 curl http://localhost:3001/api/redis/keys
+
+curl http://localhost:3001/api/redis/key-values
 ```
 
 ### Testing WebSocket Connection
@@ -111,6 +141,7 @@ npm start
 | `/api/health` | GET | Health check |
 | `/api/redis/info` | GET | Complete Redis information |
 | `/api/redis/metrics` | GET | Formatted metrics for charts |
+| `/api/redis/key-values` | GET | Browse keys and values |
 | `/api/redis/keys` | GET | Keys count |
 | WebSocket `/ws` | - | Real-time metrics stream |
 
@@ -131,6 +162,7 @@ The dashboard displays the following Redis metrics:
 - **Cache Hit Rate**: Ratio of successful key lookups
 - **Uptime**: Redis server uptime
 - **Command Statistics**: Total commands processed
+- **Key Explorer** : Browse, and view Redis keys and their values
 
 ## Docker Services
 
