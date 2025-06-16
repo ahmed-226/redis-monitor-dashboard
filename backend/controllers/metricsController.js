@@ -39,8 +39,23 @@ async function getKeysCount(req, res) {
   }
 }
 
+async function getKeyValues(req, res) {
+  try {
+    const pattern = req.query.pattern || '*';
+    const limit = parseInt(req.query.limit || 100, 10);
+    
+    const result = await metricsService.getKeyValues(pattern, limit);
+    res.json(result);
+  } catch (error) {
+    console.error('Error in key values controller:', error);
+    res.status(500).json({ error: 'Failed to get key values' });
+  }
+}
+
+
 module.exports = {
   getRedisInfo,
   getMetrics,
-  getKeysCount
+  getKeysCount,
+  getKeyValues
 };

@@ -57,8 +57,64 @@ async function getKeysCount() {
   }
 }
 
+async function getKeyValues(pattern = '*', limit = 100) {
+  try {
+    const redisClient = getRedisClient();
+    const keys = await redisClient.keys(pattern);
+    const limitedKeys = keys.slice(0, limit);
+    
+    const result = [];
+    for (const key of limitedKeys) {
+      const type = await redisClient.type(key);
+      let value;
+      
+      switch(type) {
+        case 'string':
+          value = await redisClient.get(key);
+          break;
+        case 'list':
+          value = await redisClient.lRange(key, 0, 9); // First 10 elements
+          break;
+        case 'set':
+          value = await redisClient.sMembers(key);
+          break;
+        case 'hash':
+          value = await redisClient.hGetAll(key);
+          break;
+        case 'zset':
+          value = await redisClient.zRange(key, 0, 9); // First 10 elements
+          break;
+        default:
+          value = `Unsupported type: ${type}`;
+      }
+      
+      result.push({
+        key,
+        type,
+        value,
+        ttl: await redisClient.ttl(key)
+      });
+    }
+    
+    return {
+      totalKeys: keys.length,
+      displayedKeys: result.length,
+      keys: result
+    };
+  } catch (error) {
+    console.error('Error getting key values:', error);
+    return {
+      totalKeys: 0,
+      displayedKeys: 0,
+      keys: []
+    };
+  }
+}
+
+
 module.exports = {
   getRedisInfo,
   getMetrics,
-  getKeysCount
+  getKeysCount,
+  getKeyValues
 };
