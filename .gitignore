@@ -23,3 +23,8 @@ yarn-debug.log*
 yarn-error.log*
 
 package-lock.json
+
+*.sh
+!start.sh
+
+docker-compose.publish.yml
